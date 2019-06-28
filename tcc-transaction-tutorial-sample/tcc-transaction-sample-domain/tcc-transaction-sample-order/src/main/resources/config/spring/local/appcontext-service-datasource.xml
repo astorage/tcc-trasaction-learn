@@ -7,20 +7,19 @@
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
          http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <util:properties id="jdbc" location="classpath:jdbc.properties"/>
+    <util:properties id="jdbcf" location="classpath:jdbc.properties"/>
 
-    <bean id="orderDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-          destroy-method="close" lazy-init="false">
-        <property name="driverClass" value="#{jdbc['jdbc.driverClassName']}"/>
-        <property name="jdbcUrl" value="#{jdbc['jdbc.url']}"/>
-        <property name="user" value="#{jdbc['jdbc.username']}"/>
-        <property name="password" value="#{jdbc['jdbc.password']}"/>
-        <property name="initialPoolSize" value="#{jdbc['c3p0.initialPoolSize']}"/>
-        <property name="minPoolSize" value="#{jdbc['c3p0.minPoolSize']}"/>
-        <property name="maxPoolSize" value="#{jdbc['c3p0.maxPoolSize']}"/>
-        <property name="acquireIncrement" value="#{jdbc['c3p0.acquireIncrement']}"/>
-        <property name="maxIdleTime" value="#{jdbc['c3p0.maxIdleTime']}"/>
-        <property name="checkoutTimeout" value="#{jdbc['c3p0.checkoutTimeout']}"/>
+    <bean id="orderDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" lazy-init="false">
+        <property name="driverClass" value="#{jdbcf['jdbc.driverClassName']}"/>
+        <property name="jdbcUrl" value="#{jdbcf['jdbc.url']}"/>
+        <property name="user" value="#{jdbcf['jdbc.username']}"/>
+        <property name="password" value="#{jdbcf['jdbc.password']}"/>
+        <property name="initialPoolSize" value="#{jdbcf['c3p0.initialPoolSize']}"/>
+        <property name="minPoolSize" value="#{jdbcf['c3p0.minPoolSize']}"/>
+        <property name="maxPoolSize" value="#{jdbcf['c3p0.maxPoolSize']}"/>
+        <property name="acquireIncrement" value="#{jdbcf['c3p0.acquireIncrement']}"/>
+        <property name="maxIdleTime" value="#{jdbcf['c3p0.maxIdleTime']}"/>
+        <property name="checkoutTimeout" value="#{jdbcf['c3p0.checkoutTimeout']}"/>
     </bean>
 
     <bean id="transactionManager"

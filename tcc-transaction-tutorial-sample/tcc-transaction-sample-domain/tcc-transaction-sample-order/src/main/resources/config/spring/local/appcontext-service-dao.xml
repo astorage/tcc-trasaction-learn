@@ -35,4 +35,6 @@
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
     </bean>
 
+    <import resource="appcontext-service-datasource.xml"/>
+
 </beans>

@@ -23,15 +23,15 @@
     <!--<dubbo:consumer proxy="javassist" />-->
 
     <dubbo:reference id="captialTradeOrderService"
-                     interface="org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService" timeout="5000"/>
+                     interface="org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService" timeout="5000" check="false"/>
 
     <dubbo:reference id="redPacketTradeOrderService"
-                     interface="org.mengyun.tcctransaction.sample.dubbo.redpacket.api.RedPacketTradeOrderService" timeout="5000"/>
+                     interface="org.mengyun.tcctransaction.sample.dubbo.redpacket.api.RedPacketTradeOrderService" timeout="5000" check="false"/>
 
     <dubbo:reference id="redPacketAccountService"
-                     interface="org.mengyun.tcctransaction.sample.dubbo.redpacket.api.RedPacketAccountService" timeout="5000"/>
+                     interface="org.mengyun.tcctransaction.sample.dubbo.redpacket.api.RedPacketAccountService" timeout="5000" check="false"/>
 
     <dubbo:reference id="capitalAccountService"
-                     interface="org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalAccountService" timeout="5000"/>
+                     interface="org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalAccountService" timeout="5000" check="false"/>
 
 </beans>

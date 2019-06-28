@@ -61,7 +61,7 @@
 
     <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
     <constructor-arg index="0" ref="jedisPoolConfig"/>
-    <constructor-arg index="1" value="127.0.0.1"/>
+    <constructor-arg index="1" value="10.10.2.234"/>
     <constructor-arg index="2" value="6379" type="int"/>
     <constructor-arg index="3" value="1000" type="int"/>
     <constructor-arg index="4" type="java.lang.String">

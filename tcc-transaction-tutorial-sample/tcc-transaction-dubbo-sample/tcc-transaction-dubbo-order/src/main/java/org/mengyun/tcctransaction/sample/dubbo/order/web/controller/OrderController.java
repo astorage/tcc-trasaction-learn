@@ -25,7 +25,7 @@ import java.util.List;
  * Created by changming.xie on 4/1/16.
  */
 @Controller
-@RequestMapping("")
+@RequestMapping("/")
 public class OrderController {
 
     @Autowired

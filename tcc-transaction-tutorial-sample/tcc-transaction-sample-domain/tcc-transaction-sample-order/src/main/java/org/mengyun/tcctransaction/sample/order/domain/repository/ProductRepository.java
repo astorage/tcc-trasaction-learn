@@ -1,5 +1,6 @@
 package org.mengyun.tcctransaction.sample.order.domain.repository;
 
+import org.apache.log4j.Logger;
 import org.mengyun.tcctransaction.sample.order.domain.entity.Product;
 import org.mengyun.tcctransaction.sample.order.infrastructure.dao.ProductDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import java.util.List;
 @Repository
 public class ProductRepository {
 
+    private static final Logger logger = Logger.getLogger(ProductRepository.class);
+
     @Autowired
     ProductDao productDao;
 
@@ -21,6 +24,12 @@ public class ProductRepository {
     }
 
     public List<Product> findByShopId(long shopId){
-        return productDao.findByShopId(shopId);
+        try {
+            return productDao.findByShopId(shopId);
+        }catch (Exception e) {
+            logger.error("查询数据失败", e);
+            throw new RuntimeException(e);
+        }
+
     }
 }
