@@ -1,6 +1,7 @@
 package org.mengyun.tcctransaction;
 
 
+import org.apache.log4j.Logger;
 import org.mengyun.tcctransaction.api.TransactionContext;
 import org.mengyun.tcctransaction.api.TransactionStatus;
 import org.mengyun.tcctransaction.api.TransactionXid;
@@ -20,6 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Transaction implements Serializable {
 
     private static final long serialVersionUID = 7291423944314337931L;
+
+    static final Logger logger = Logger.getLogger(Transaction.class.getSimpleName());
 
     private TransactionXid xid;
 
@@ -92,6 +95,7 @@ public class Transaction implements Serializable {
     public void commit() {
 
         for (Participant participant : participants) {
+            logger.error(Thread.currentThread().getName() + " 事务id：" +participant.getXid().toString());
             participant.commit();
         }
     }

@@ -1,5 +1,6 @@
 package org.mengyun.tcctransaction.interceptor;
 
+import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.mengyun.tcctransaction.InvocationContext;
@@ -22,18 +23,22 @@ import java.lang.reflect.Method;
 public class ResourceCoordinatorInterceptor {
 
     private TransactionManager transactionManager;
-
+    static final Logger logger = Logger.getLogger(ResourceCoordinatorInterceptor.class.getSimpleName());
 
     public void setTransactionManager(TransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
 
     public Object interceptTransactionContextMethod(ProceedingJoinPoint pjp) throws Throwable {
-
+        logger.error("RCI当前拦截方法：" + pjp.getSignature());
+        logger.error("当前线程程：" + Thread.currentThread().getName());
         Transaction transaction = transactionManager.getCurrentTransaction();
-        System.err.println("RCI当前拦截方法：" + pjp.getSignature());
-        if (transaction != null) {
+        if(transaction == null) {
+            logger.error("transation 为 null");
+        }
 
+        if (transaction != null) {
+            logger.error("事务阶段：" + transaction.getStatus());
             switch (transaction.getStatus()) {
                 case TRYING:
                     enlistParticipant(pjp);
@@ -44,7 +49,7 @@ public class ResourceCoordinatorInterceptor {
                     break;
             }
         }
-
+        logger.error("RCI当前拦截方法==结束：" + pjp.getSignature());
         return pjp.proceed(pjp.getArgs());
     }
 

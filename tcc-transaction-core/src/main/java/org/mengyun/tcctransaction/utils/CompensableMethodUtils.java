@@ -1,5 +1,6 @@
 package org.mengyun.tcctransaction.utils;
 
+import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.mengyun.tcctransaction.api.Compensable;
@@ -14,9 +15,12 @@ import java.lang.reflect.Method;
  */
 public class CompensableMethodUtils {
 
+    static final Logger logger = Logger.getLogger(CompensableMethodUtils.class.getSimpleName());
+
     public static Method getCompensableMethod(ProceedingJoinPoint pjp) {
         Method method = ((MethodSignature) (pjp.getSignature())).getMethod();
-
+        Compensable compensable = method.getAnnotation(Compensable.class);
+        logger.error(compensable.confirmMethod() + "==" + compensable.cancelMethod());
         if (method.getAnnotation(Compensable.class) == null) {
             try {
                 method = pjp.getTarget().getClass().getMethod(method.getName(), method.getParameterTypes());

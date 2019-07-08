@@ -37,7 +37,7 @@ public class CompensableTransactionInterceptor {
     }
 
     public Object interceptCompensableMethod(ProceedingJoinPoint pjp) throws Throwable {
-        System.err.println("CTI当前拦截方法：" + pjp.getSignature());
+        logger.error("CTI当前拦截方法：" + pjp.getSignature());
         CompensableMethodContext compensableMethodContext = new CompensableMethodContext(pjp);
 
         boolean isTransactionActive = transactionManager.isTransactionActive();
@@ -45,13 +45,19 @@ public class CompensableTransactionInterceptor {
         if (!TransactionUtils.isLegalTransactionContext(isTransactionActive, compensableMethodContext)) {
             throw new SystemException("no active compensable transaction while propagation is mandatory for method " + compensableMethodContext.getMethod().getName());
         }
-
+        logger.error("方法角色：" + compensableMethodContext.getMethodRole(isTransactionActive));
+        logger.error("当前线程：" + Thread.currentThread().getName());
         switch (compensableMethodContext.getMethodRole(isTransactionActive)) {
             case ROOT:
-                return rootMethodProceed(compensableMethodContext);
+                Object result = rootMethodProceed(compensableMethodContext);
+                logger.error("CTI当前拦截方法==结束：" + pjp.getSignature());
+                return result;
             case PROVIDER:
-                return providerMethodProceed(compensableMethodContext);
+                Object result1 = providerMethodProceed(compensableMethodContext);
+                logger.error("CTI当前拦截方法==结束：" + pjp.getSignature());
+                return result1;
             default:
+                logger.error("CTI当前拦截方法==结束：" + pjp.getSignature());
                 return pjp.proceed();
         }
     }
@@ -76,7 +82,9 @@ public class CompensableTransactionInterceptor {
             transaction = transactionManager.begin(compensableMethodContext.getUniqueIdentity());
 
             try {
+                logger.error("rootMethodProceed 开始：" + compensableMethodContext.pjp.getSignature() + "." + compensableMethodContext.getMethod().getName());
                 returnValue = compensableMethodContext.proceed();
+                logger.error("rootMethodProceed 结束：" + compensableMethodContext.pjp.getSignature() + "." + compensableMethodContext.getMethod().getName());
             } catch (Throwable tryingException) {
 
                 if (!isDelayCancelException(tryingException, allDelayCancelExceptions)) {

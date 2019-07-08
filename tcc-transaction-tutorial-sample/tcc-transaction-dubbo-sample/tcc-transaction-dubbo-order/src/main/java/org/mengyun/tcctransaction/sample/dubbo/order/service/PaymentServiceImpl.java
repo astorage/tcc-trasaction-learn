@@ -1,6 +1,7 @@
 package org.mengyun.tcctransaction.sample.dubbo.order.service;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.log4j.Logger;
 import org.mengyun.tcctransaction.api.Compensable;
 import org.mengyun.tcctransaction.api.UniqueIdentity;
 import org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService;
@@ -23,6 +24,7 @@ import java.util.Calendar;
 @Service
 public class PaymentServiceImpl {
 
+    static final Logger logger = Logger.getLogger(PaymentServiceImpl.class.getSimpleName());
     @Autowired
     CapitalTradeOrderService capitalTradeOrderService;
 
@@ -45,10 +47,15 @@ public class PaymentServiceImpl {
                 //ignore the concurrently update order exception, ensure idempotency.
             }
         }
+        logger.error("当前线程程：" + Thread.currentThread().getName());
 
+        logger.error("调用现金try服务开始。" + Thread.currentThread().getName());
         String result = capitalTradeOrderService.record(buildCapitalTradeOrderDto(order));
+        logger.error("调用现金try服务结束。" + Thread.currentThread().getName());
 
+        logger.error("调用红包服务开始：" + Thread.currentThread().getName());
         String result2 = redPacketTradeOrderService.record(buildRedPacketTradeOrderDto(order));
+        logger.error("调用红包服务结束：" + Thread.currentThread().getName());
     }
 
     public void confirmMakePayment(String orderNo, Order order, BigDecimal redPacketPayAmount, BigDecimal capitalPayAmount) {

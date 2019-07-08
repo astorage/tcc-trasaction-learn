@@ -186,6 +186,11 @@ public class TransactionManager {
     public void enlistParticipant(Participant participant) {
         Transaction transaction = this.getCurrentTransaction();
         transaction.enlistParticipant(participant);
+        for (Participant p : transaction.getParticipants()) {
+            logger.error(p.getXid().toString());
+            logger.error(p.getCancelInvocationContext().getTargetClass() + "." +p.getCancelInvocationContext().getMethodName());
+            logger.error(p.getConfirmInvocationContext().getTargetClass() + "." + p.getConfirmInvocationContext().getMethodName());
+        }
         transactionRepository.update(transaction);
     }
 }
