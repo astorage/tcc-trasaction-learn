@@ -31,7 +31,7 @@ public class ResourceCoordinatorInterceptor {
     public Object interceptTransactionContextMethod(ProceedingJoinPoint pjp) throws Throwable {
 
         Transaction transaction = transactionManager.getCurrentTransaction();
-
+        System.err.println("RCI当前拦截方法：" + pjp.getSignature());
         if (transaction != null) {
 
             switch (transaction.getStatus()) {

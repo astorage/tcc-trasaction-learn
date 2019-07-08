@@ -37,7 +37,7 @@ public class CompensableTransactionInterceptor {
     }
 
     public Object interceptCompensableMethod(ProceedingJoinPoint pjp) throws Throwable {
-
+        System.err.println("CTI当前拦截方法：" + pjp.getSignature());
         CompensableMethodContext compensableMethodContext = new CompensableMethodContext(pjp);
 
         boolean isTransactionActive = transactionManager.isTransactionActive();

@@ -27,14 +27,17 @@ public class Terminator implements Serializable {
 
             try {
 
-                Object target = FactoryBuilder.factoryOf(invocationContext.getTargetClass()).getInstance();
+                Object target = FactoryBuilder.factoryOf(invocationContext.getTargetClass())
+                        .getInstance();
 
                 Method method = null;
 
                 method = target.getClass().getMethod(invocationContext.getMethodName(), invocationContext.getParameterTypes());
 
-                FactoryBuilder.factoryOf(transactionContextEditorClass).getInstance().set(transactionContext, target, method, invocationContext.getArgs());
-
+                FactoryBuilder.factoryOf(transactionContextEditorClass)
+                        .getInstance()
+                        .set(transactionContext, target, method, invocationContext.getArgs());
+                System.out.println("反射调用： " + invocationContext.getTargetClass() + "."+ invocationContext.getMethodName() + "参数：" + invocationContext.getArgs());
                 return method.invoke(target, invocationContext.getArgs());
 
             } catch (Exception e) {

@@ -37,7 +37,9 @@ public class TransactionRecovery {
 
         TransactionRepository transactionRepository = transactionConfigurator.getTransactionRepository();
         RecoverConfig recoverConfig = transactionConfigurator.getRecoverConfig();
-
+        /**
+         * 查询RecoverDuration秒之前的事务，作为恢复对象
+         */
         return transactionRepository.findAllUnmodifiedSince(new Date(currentTimeInMillis - recoverConfig.getRecoverDuration() * 1000));
     }
 
@@ -52,6 +54,9 @@ public class TransactionRecovery {
                 continue;
             }
 
+            /**
+             * 如果事务是分支事务，且事务没有超过最大尝试次数，就不进行恢复
+             */
             if (transaction.getTransactionType().equals(TransactionType.BRANCH)
                     && (transaction.getCreateTime().getTime() +
                     transactionConfigurator.getRecoverConfig().getMaxRetryCount() *
@@ -72,7 +77,9 @@ public class TransactionRecovery {
 
                 } else if (transaction.getStatus().equals(TransactionStatus.CANCELLING)
                         || transaction.getTransactionType().equals(TransactionType.ROOT)) {
-
+                    /**
+                     * 根事务超过RecoverDuration,事务状态不为confirm，进行取消事务操作
+                     */
                     transaction.changeStatus(TransactionStatus.CANCELLING);
                     transactionConfigurator.getTransactionRepository().update(transaction);
                     transaction.rollback();
