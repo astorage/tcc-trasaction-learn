@@ -73,6 +73,7 @@ red packet try record called. time seq:2019-07-08 16:11:19
 [sample-dubbo-order]2019-07-08 16:11:19,066 ERROR [CompensableTransactionInterceptor] rootMethodProceed 结束：void org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.makePayment(String,Order,BigDecimal,BigDecimal).makePayment
 
 ### 消费端获取的服务端@Compensable注解中的属性confirmMethod和cancelMethod怎么都是try方法record？在哪里设置的？
+通过反射获取的注解就是就是record！ 但这是什么道理
 
 [sample-dubbo-order]2019-07-08 16:11:19,068 ERROR [Transaction] http-nio-8081-exec-7 事务id：86471041-37e0-392e-936e-f3a2a6e33218:b9f9f42c-a284-3e15-a6fa-a691a4240429
 [sample-dubbo-order]2019-07-08 16:11:19,069 ERROR [Terminator] 当前线程：http-nio-8081-exec-7
@@ -125,3 +126,4 @@ red packet confirm record called. time seq:2019-07-08 16:11:22
 
 ### 最后1个问题：
 1、服务之间怎么传递事务信息的？
+使用RpcContext将事务上下文在服务之间传递。TransactionContext以字符串的形式传递的
